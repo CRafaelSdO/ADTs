@@ -1,60 +1,145 @@
-    #include "libs/linked_list.h"
+#include "libs/linked_list.h"
 
-    struct _linked_list {
-        U64_t length;
-        node_t *head;
-        node_t *tail;
-    };
+struct _linked_list {
+	S64_t lngth;
+	node_t *hd;
+	node_t *tl;
+};
 
-    linked_list_t *new_list() {
-        linked_list_t *new = (linked_list_t *) calloc(1, sizeof(linked_list_t));
-        new->length = 0;
-        new->head = NULL;
-        new->tail = NULL;
-        return new;
-    }
+linked_list_t *new_list() {
+	linked_list_t *nw = (linked_list_t *) calloc(1, sizeof(linked_list_t));
+	nw->lngth = 0;
+	nw->hd = NULL;
+	nw->tl = NULL;
+	return nw;
+}
 
-    void destroy_list(linked_list_t **list, void (*destroy_item)(void **)) {
-        if((*list) != NULL) {
-            destroy_node(&(*list)->head, destroy_item);
-            free((*list));
-            (*list) = NULL;
-        }
-    }
+void destroy_list(linked_list_t **lst, void (*destroy_item)(void **)) {
+	if((*lst) != NULL) {
+		destroy_node(&(*lst)->hd, destroy_item);
+		free((*lst));
+		(*lst) = NULL;
+	}
+}
 
-    void insert(void *item, U64_t index, linked_list_t *list) {
-        if(list != NULL) {
-            if(index == 0) {
-                node_t *new = new_node(item);
-                set_next(new, list->head);
-                list->head = new;
-                if(length(list) == 0) {
-                    list->tail = list->head;
-                }
-            } else if(index <= length(list)){
-                node_t *new = new_node(item);
-                node_t *temp_node = list->head;
-                for(U64_t i = 0; i < index - 1; i++) {
-                    temp_node = next(temp_node);
-                }
-                set_next(new, next(temp_node));
-                set_next(temp_node, new);
-            } else {
-                printf("Index out of bound!\n");
-            }
-        } else {
-            printf("List is NULL!\n");
-        }
-    }
+void insert(void *itm, S64_t ndx, linked_list_t *lst) {
+	if(lst != NULL) {
+		if(ndx == 0) {
+			node_t *nw = new_node(itm);
+			set_next(nw, lst->hd);
+			lst->hd = nw;
+			if(length(lst) == 0) {
+				lst->tl = lst->hd;
+			}
+		} else if(ndx <= length(lst) && ndx > 0) {
+			node_t *nw = new_node(itm);
+			node_t *tmp = lst->hd;
+			for(S64_t i = 0; i < ndx - 1; i++) {
+				tmp = next(tmp);
+			}
+			set_next(nw, next(tmp));
+			set_next(tmp, nw);
+		} else {
+			printf("Index out of bound!\n");
+		}
+	} else {
+		printf("List is NULL!\n");
+	}
+}
 
-    void *remove_by_item(void *, linked_list_t *, bool (void *));
+S64_t get_index_of_item(void *itm, linked_list_t *lst, bool (*equals)(void *, void *)) {
+	if(lst != NULL) {
+		node_t *tmp = lst->hd;
+		S64_t ndx = 0;
+		while(tmp != NULL) {
+			if(equals(itm, item(tmp))) {
+				return ndx;
+			}
+			ndx++;
+			tmp = next(tmp);
+		}
+		return LLONG_MIN;
+	} else {
+		printf("List is NULL!\n");
+		return LLONG_MIN;
+	}
+}
 
-    void *remove_by_index(U64_t, linked_list_t *, bool (void *));
+void *get_item_of_index(S64_t ndx, linked_list_t *lst) {
+	if(lst != NULL) {
+		if(ndx < 0 || ndx >= length(lst)) {
+			printf("Index out of bound!\n");
+			return NULL;
+		}
+		node_t *tmp = lst->hd;
+		for(S64_t i = 0; i < ndx; i++) {
+			tmp = next(tmp);
+		}
+		return item(tmp);
+	} else {
+		printf("List is NULL!\n");
+		return NULL;
+	}
+}
 
-    U64_t length(linked_list_t *list) {
-        if(list != NULL) {
-            return list->length;
-        } else {
-            return 0;
-        }
-    }
+void *remove_by_item(void *itm, linked_list_t *lst, bool (*equals)(void *, void *)){
+	if(lst != NULL) {
+		node_t *tmp = lst->hd;
+		while(next(tmp) != NULL) {
+			if(equals(itm, item(next(tmp))) {
+				node_t *rmv = next(tmp);
+				set_next(tmp, next(rmv));
+				set_next(rmv, NULL);
+				void *rtrn = item(rmv);
+				set_item(rmv, NULL);
+				destroy_node(&rmv);
+				return rtrn;
+			}
+			tmp = next(tmp);
+		}
+		return NULL;
+	} else {
+		printf("List is NULL!\n");
+		return NULL;
+	}
+}
+
+void *remove_by_index(S64_t ndx, linked_list_t *lst) {
+	if(lst != NULL) {
+		if(ndx < 0 || ndx >= length(lst)) {
+			printf("Index out of bound!\n");
+			return NULL;
+		}
+		node_t *tmp = lst->hd;
+		if(ndx == 0) {
+			lst->hd = next(tmp);
+			set_next(tmp, NULL);
+			void *rtrn = item(tmp);
+			set_item(tmp, NULL);
+			destroy_node(&rmv);
+			return rtrn;
+		}
+		for(S64_t i = 0; i < ndx - 1; i++) {
+			tmp = next(tmp);
+		}
+		node_t *rmv = next(tmp);
+		set_next(tmp, next(rmv));
+		set_next(rmv, NULL);
+		void *rtrn = item(rmv);
+		set_item(rmv, NULL);
+		destroy_node(&rmv);
+		return rtrn;
+	} else {
+		printf("List is NULL!\n");
+		return NULL;
+	}
+}
+
+S64_t length(linked_list_t *nw) {
+	if(nw != NULL) {
+		return nw->lngth;
+	} else {
+		printf("List is NULL!\n");
+		return LLONG_MIN;
+	}
+}
