@@ -15,7 +15,9 @@ node_t *new_node(void *itm) {
 void destroy_node(node_t **nd, void (*destroy_item)(void **)) {
 	if((*nd) != NULL) {
 		destroy_node(&(*nd)->nxt, destroy_item);
-		destroy_item(&(*nd)->itm);
+		if(destroy_item != NULL) {
+			destroy_item(&(*nd)->itm);
+		}
 		free((*nd));
 		(*nd) = NULL;
 	}

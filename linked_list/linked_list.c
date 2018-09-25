@@ -28,9 +28,10 @@ void insert(void *itm, S64_t ndx, linked_list_t *lst) {
 			node_t *nw = new_node(itm);
 			set_next(nw, lst->hd);
 			lst->hd = nw;
-			if(length(lst) == 0) {
+			if(is_empty(lst)) {
 				lst->tl = lst->hd;
 			}
+			lst->lngth++;
 		} else if(ndx <= length(lst) && ndx > 0) {
 			node_t *nw = new_node(itm);
 			node_t *tmp = lst->hd;
@@ -39,6 +40,7 @@ void insert(void *itm, S64_t ndx, linked_list_t *lst) {
 			}
 			set_next(nw, next(tmp));
 			set_next(tmp, nw);
+			lst->lngth++;
 		} else {
 			printf("Index out of bound!\n");
 		}
@@ -86,13 +88,14 @@ void *remove_by_item(void *itm, linked_list_t *lst, bool (*equals)(void *, void 
 	if(lst != NULL) {
 		node_t *tmp = lst->hd;
 		while(next(tmp) != NULL) {
-			if(equals(itm, item(next(tmp))) {
+			if(equals(itm, item(next(tmp)))) {
 				node_t *rmv = next(tmp);
 				set_next(tmp, next(rmv));
 				set_next(rmv, NULL);
 				void *rtrn = item(rmv);
 				set_item(rmv, NULL);
-				destroy_node(&rmv);
+				destroy_node(&rmv, NULL);
+				lst->lngth--;
 				return rtrn;
 			}
 			tmp = next(tmp);
@@ -116,7 +119,8 @@ void *remove_by_index(S64_t ndx, linked_list_t *lst) {
 			set_next(tmp, NULL);
 			void *rtrn = item(tmp);
 			set_item(tmp, NULL);
-			destroy_node(&rmv);
+			destroy_node(&tmp, NULL);
+			lst->lngth--;
 			return rtrn;
 		}
 		for(S64_t i = 0; i < ndx - 1; i++) {
@@ -127,7 +131,8 @@ void *remove_by_index(S64_t ndx, linked_list_t *lst) {
 		set_next(rmv, NULL);
 		void *rtrn = item(rmv);
 		set_item(rmv, NULL);
-		destroy_node(&rmv);
+		destroy_node(&rmv, NULL);
+		lst->lngth--;
 		return rtrn;
 	} else {
 		printf("List is NULL!\n");
@@ -135,11 +140,20 @@ void *remove_by_index(S64_t ndx, linked_list_t *lst) {
 	}
 }
 
-S64_t length(linked_list_t *nw) {
-	if(nw != NULL) {
-		return nw->lngth;
+S64_t length(linked_list_t *lst) {
+	if(lst != NULL) {
+		return lst->lngth;
 	} else {
 		printf("List is NULL!\n");
 		return LLONG_MIN;
+	}
+}
+
+bool is_empty(linked_list_t *lst) {
+	if(lst != NULL) {
+		return length(lst) == 0;
+	} else {
+		printf("List is NULL!\n");
+		return true;
 	}
 }

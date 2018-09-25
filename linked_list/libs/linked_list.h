@@ -25,4 +25,6 @@ void *remove_by_index(S64_t, linked_list_t *);
 
 S64_t length(linked_list_t *);
 
+bool is_empty(linked_list_t *);
+
 #endif
