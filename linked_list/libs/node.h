@@ -4,18 +4,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef struct _node node_t;
+typedef struct _linked_list_node LLN_t;
 
-node_t *new_node(void *);
+LLN_t *new_node(void *);
 
-void destroy_node(node_t **, void (void **));
+void destroy_node(LLN_t **, void (void **));
 
-void *item(node_t *);
+void *item(LLN_t *);
 
-void set_item(node_t *, void *);
+void set_item(LLN_t *, void *);
 
-node_t *next(node_t *);
+LLN_t *next(LLN_t *);
 
-void set_next(node_t *, node_t *);
+void set_next(LLN_t *, LLN_t *);
 
 #endif

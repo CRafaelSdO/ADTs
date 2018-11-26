@@ -1,22 +1,22 @@
 #include "libs/node.h"
 
-struct _node {
+struct _linked_list_node {
 	void *itm;
-	node_t *nxt;
+	LLN_t *nxt;
 };
 
-node_t *new_node(void *itm) {
-	node_t *nw = (node_t *) calloc(1, sizeof(node_t));
+LLN_t *new_node(void *itm) {
+	LLN_t *nw = (LLN_t *) calloc(1, sizeof(LLN_t));
 	if(nw != NULL) {
 		nw->itm = itm;
 		nw->nxt = NULL;
 	} else {
-		printf("Erro:\n\tNão foi possível alocar memória para o novo node.\n");
+		printf("Erro (new_node):\n\tNão foi possível alocar memória para o novo node.\n");
 	}
 	return nw;
 }
 
-void destroy_node(node_t **nd, void (*destroy_item)(void **)) {
+void destroy_node(LLN_t **nd, void (*destroy_item)(void **)) {
 	if((*nd) != NULL) {
 		destroy_node(&(*nd)->nxt, destroy_item);
 		if(destroy_item != NULL) {
@@ -27,36 +27,36 @@ void destroy_node(node_t **nd, void (*destroy_item)(void **)) {
 	}
 }
 
-void *item(node_t *nd) {
+void *item(LLN_t *nd) {
 	if(nd != NULL) {
 		return nd->itm;
 	} else {
-		printf("Erro:\n\tO ponteiro para o node é NULL.\n");
+		printf("Erro (item):\n\tO ponteiro para o node é NULL.\n");
 		return NULL;
 	}
 }
 
-void set_item(node_t *nd, void *itm) {
+void set_item(LLN_t *nd, void *itm) {
 	if(nd != NULL) {
 		nd->itm = itm;
 	} else {
-		printf("O\n\tponteiro para o node é NULL.\n");
+		printf("Erro (set_item):\n\tO ponteiro para o node é NULL.\n");
 	}
 }
 
-node_t *next(node_t *nd) {
+LLN_t *next(LLN_t *nd) {
 	if(nd != NULL) {
 		return nd->nxt;
 	} else {
-		printf("O\n\tponteiro para o node é NULL.\n");
+		printf("Erro (next):\n\tO ponteiro para o node é NULL.\n");
 		return NULL;
 	}
 }
 
-void set_next(node_t *nd, node_t *nxt) {
+void set_next(LLN_t *nd, LLN_t *nxt) {
 	if(nd != NULL) {
 		nd->nxt = nxt;
 	} else {
-		printf("O\n\tponteiro para o node é NULL.\n");
+		printf("Erro (set_next):\n\tO ponteiro para o node é NULL.\n");
 	}
 }
