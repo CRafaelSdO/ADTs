@@ -1,5 +1,5 @@
-#ifndef NODE_H
-#define NODE_H
+#ifndef LLN_H
+#define LLN_H
 
 #include <stdio.h>
 #include <stdlib.h>

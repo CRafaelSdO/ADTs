@@ -1,5 +1,5 @@
-#ifndef LINKED_LIST_H
-#define LINKED_LIST_H
+#ifndef LL_H
+#define LL_H
 
 #include "node.h"
 #include <limits.h>
