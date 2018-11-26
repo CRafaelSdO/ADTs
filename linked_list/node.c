@@ -10,20 +10,25 @@ LLN_t *new_node(void *itm) {
 	if(nw != NULL) {
 		nw->itm = itm;
 		nw->nxt = NULL;
+		return nw;
 	} else {
 		printf("Erro (new_node):\n\tNão foi possível alocar memória para o novo node.\n");
 	}
-	return nw;
+	return NULL;
 }
 
 void destroy_node(LLN_t **nd, void (*destroy_item)(void **)) {
 	if((*nd) != NULL) {
-		destroy_node(&(*nd)->nxt, destroy_item);
+		if((*nd)->nxt != NULL) {
+			destroy_node(&(*nd)->nxt, destroy_item);
+		}
 		if(destroy_item != NULL) {
 			destroy_item(&(*nd)->itm);
 		}
 		free((*nd));
 		(*nd) = NULL;
+	} else {
+		printf("Erro (destroy_node):\n\tO ponteiro para o node é NULL.\n");
 	}
 }
 
@@ -32,8 +37,8 @@ void *item(LLN_t *nd) {
 		return nd->itm;
 	} else {
 		printf("Erro (item):\n\tO ponteiro para o node é NULL.\n");
-		return NULL;
 	}
+	return NULL;
 }
 
 void set_item(LLN_t *nd, void *itm) {
@@ -49,8 +54,8 @@ LLN_t *next(LLN_t *nd) {
 		return nd->nxt;
 	} else {
 		printf("Erro (next):\n\tO ponteiro para o node é NULL.\n");
-		return NULL;
 	}
+	return NULL;
 }
 
 void set_next(LLN_t *nd, LLN_t *nxt) {

@@ -12,22 +12,27 @@ LL_t *new_list() {
 		nw->lngth = 0;
 		nw->hd = NULL;
 		nw->tl = NULL;
+		return nw;
 	} else {
-		printf("Erro:\n\tNão foi possível alocar memória para a nova lista.\n");
+		printf("Erro (new_list):\n\tNão foi possível alocar memória para a nova lista.\n");
 	}
-	return nw;
+	return NULL;
 }
 
 void print_list(LL_t *lst, void (prnt_itm)(void *)) {
 	if(lst != NULL) {
-		LLN_t *tmp = lst->hd;
-		for(S64_t i = 0; i < length(lst); i++) {
-			printf("|%lld|\n", i);
-			prnt_itm(item(tmp));
-			tmp = next(tmp);
+		if(prnt_itm != NULL) {
+			LLN_t *tmp = lst->hd;
+			for(S64_t i = 0; i < length(lst); i++) {
+				printf("|%lld|\n", i);
+				prnt_itm(item(tmp));
+				tmp = next(tmp);
+			}
+		} else {
+			printf("Erro (print_list):\n\tO ponteiro para a função é NULL.\n");
 		}
 	} else {
-		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");
+		printf("Erro (print_list):\n\tO ponteiro para a lista é NULL.\n");
 	}
 }
 
@@ -36,30 +41,36 @@ void destroy_list(LL_t **lst, void (*destroy_item)(void **)) {
 		destroy_node(&(*lst)->hd, destroy_item);
 		free((*lst));
 		(*lst) = NULL;
+	} else {
+		printf("Erro (destroy_list):\n\tO ponteiro para a lista é NULL.\n");
 	}
 }
 
 void insert_by_item(void *itm, LL_t *lst, bool (*cmp)(void *, void *)) {
 	if(lst != NULL) {
-		LLN_t *nw = new_node(itm);
-		LLN_t *tmp = lst->hd;
-		if(is_empty(lst)) {
-			set_next(nw, lst->hd);
-			lst->hd = nw;
-			lst->tl = lst->hd;
-		} else if(cmp(itm, item(tmp))) {
-			set_next(nw, lst->hd);
-			lst->hd = nw;
-		} else {
-			while(next(tmp) != NULL && !cmp(itm, item(tmp))) {
-				tmp = next(tmp);
+		if(cmp != NULL) {
+			LLN_t *nw = new_node(itm);
+			LLN_t *tmp = lst->hd;
+			if(is_empty(lst)) {
+				set_next(nw, lst->hd);
+				lst->hd = nw;
+				lst->tl = lst->hd;
+			} else if(cmp(itm, item(tmp))) {
+				set_next(nw, lst->hd);
+				lst->hd = nw;
+			} else {
+				while(next(tmp) != NULL && !cmp(itm, item(tmp))) {
+					tmp = next(tmp);
+				}
+				set_next(nw, next(tmp));
+				set_next(tmp, nw);
 			}
-			set_next(nw, next(tmp));
-			set_next(tmp, nw);
+			lst->lngth++;
+		} else {
+			printf("Erro (insert_by_item):\n\tO ponteiro para a função é NULL.\n");
 		}
-		lst->lngth++;
 	} else {
-		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");
+		printf("Erro (insert_by_item):\n\tO ponteiro para a lista é NULL.\n");
 	}
 }
 
@@ -83,103 +94,108 @@ void insert_by_index(void *itm, S64_t ndx, LL_t *lst) {
 			set_next(tmp, nw);
 			lst->lngth++;
 		} else {
-			printf("Erro:\n\tIndice fora dos limítes.\n");
+			printf("Erro (insert_by_index):\n\tIndice fora dos limítes.\n");
 		}
 	} else {
-		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");
+		printf("Erro (insert_by_index):\n\tO ponteiro para a lista é NULL.\n");
 	}
 }
 
 S64_t get_index_of_item(void *itm, LL_t *lst, bool (*eql)(void *, void *)) {
 	if(lst != NULL) {
-		LLN_t *tmp = lst->hd;
-		S64_t ndx = 0;
-		if(tmp == NULL) printf("tmp == NULL\n");
-		while(tmp != NULL) {
-			if(eql(itm, item(tmp))) {
-				return ndx;
+		if(eql != NULL) {
+			LLN_t *tmp = lst->hd;
+			S64_t ndx = 0;
+			while(tmp != NULL) {
+				if(eql(itm, item(tmp))) {
+					return ndx;
+				}
+				ndx++;
+				tmp = next(tmp);
 			}
-			ndx++;
-			tmp = next(tmp);
+		} else {
+			printf("Erro (get_index_of_item):\n\tO ponteiro para a função é NULL.\n");
 		}
-		return LLONG_MIN;
 	} else {
-		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");
-		return LLONG_MIN;
+		printf("Erro (get_index_of_item):\n\tO ponteiro para a lista é NULL.\n");
 	}
+	return LLONG_MIN;
 }
 
 void *get_item_of_index(S64_t ndx, LL_t *lst) {
 	if(lst != NULL) {
 		if(ndx < 0 || ndx >= length(lst)) {
-			printf("Erro:\n\tIndice fora dos limítes.\n");
-			return NULL;
+			printf("Erro (get_item_of_index):\n\tIndice fora dos limítes.\n");
+		} else {
+			LLN_t *tmp = lst->hd;
+			for(S64_t i = 0; i < ndx; i++) {
+				tmp = next(tmp);
+			}
+			return item(tmp);
 		}
-		LLN_t *tmp = lst->hd;
-		for(S64_t i = 0; i < ndx; i++) {
-			tmp = next(tmp);
-		}
-		return item(tmp);
 	} else {
-		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");
-		return NULL;
+		printf("Erro (get_item_of_index):\n\tO ponteiro para a lista é NULL.\n");
 	}
+	return NULL;
 }
 
 void *remove_by_item(void *itm, LL_t *lst, bool (*eql)(void *, void *)){
 	if(lst != NULL) {
-		LLN_t *tmp = lst->hd;
-		while(next(tmp) != NULL) {
-			if(eql(itm, item(next(tmp)))) {
-				LLN_t *rmv = next(tmp);
-				set_next(tmp, next(rmv));
-				set_next(rmv, NULL);
-				void *rtrn = item(rmv);
-				set_item(rmv, NULL);
-				destroy_node(&rmv, NULL);
-				lst->lngth--;
-				return rtrn;
+		if(eql != NULL) {
+			LLN_t *tmp = lst->hd;
+			while(next(tmp) != NULL) {
+				if(eql(itm, item(next(tmp)))) {
+					LLN_t *rmv = next(tmp);
+					set_next(tmp, next(rmv));
+					set_next(rmv, NULL);
+					void *rtrn = item(rmv);
+					set_item(rmv, NULL);
+					destroy_node(&rmv, NULL);
+					lst->lngth--;
+					return rtrn;
+				}
+				tmp = next(tmp);
 			}
-			tmp = next(tmp);
+		} else {
+			printf("Erro (remove_by_item):\n\tO ponteiro para a função é NULL.\n");
 		}
-		return NULL;
 	} else {
-		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");
-		return NULL;
+		printf("Erro (remove_by_item):\n\tO ponteiro para a lista é NULL.\n");
 	}
+	return NULL;
 }
 
 void *remove_by_index(S64_t ndx, LL_t *lst) {
 	if(lst != NULL) {
 		if(ndx < 0 || ndx >= length(lst)) {
 			printf("Erro:\n\tIndice fora dos limítes.\n");
-			return NULL;
-		}
-		LLN_t *tmp = lst->hd;
-		if(ndx == 0) {
-			lst->hd = next(tmp);
-			set_next(tmp, NULL);
-			void *rtrn = item(tmp);
-			set_item(tmp, NULL);
-			destroy_node(&tmp, NULL);
+		} else {
+			LLN_t *tmp = lst->hd;
+			if(ndx == 0) {
+				lst->hd = next(tmp);
+				set_next(tmp, NULL);
+				void *rtrn = item(tmp);
+				set_item(tmp, NULL);
+				destroy_node(&tmp, NULL);
+				lst->lngth--;
+				return rtrn;
+			}
+			for(S64_t i = 0; i < ndx - 1; i++) {
+				tmp = next(tmp);
+			}
+			LLN_t *rmv = next(tmp);
+			set_next(tmp, next(rmv));
+			set_next(rmv, NULL);
+			void *rtrn = item(rmv);
+			set_item(rmv, NULL);
+			destroy_node(&rmv, NULL);
 			lst->lngth--;
 			return rtrn;
 		}
-		for(S64_t i = 0; i < ndx - 1; i++) {
-			tmp = next(tmp);
-		}
-		LLN_t *rmv = next(tmp);
-		set_next(tmp, next(rmv));
-		set_next(rmv, NULL);
-		void *rtrn = item(rmv);
-		set_item(rmv, NULL);
-		destroy_node(&rmv, NULL);
-		lst->lngth--;
-		return rtrn;
 	} else {
 		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");
-		return NULL;
 	}
+	return NULL;
 }
 
 S64_t length(LL_t *lst) {
@@ -187,8 +203,8 @@ S64_t length(LL_t *lst) {
 		return lst->lngth;
 	} else {
 		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");
-		return LLONG_MIN;
 	}
+	return LLONG_MIN;
 }
 
 bool is_empty(LL_t *lst) {
@@ -196,6 +212,6 @@ bool is_empty(LL_t *lst) {
 		return length(lst) == 0;
 	} else {
 		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");
-		return true;
 	}
+	return true;
 }
