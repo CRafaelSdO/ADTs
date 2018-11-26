@@ -7,8 +7,12 @@ struct _node {
 
 node_t *new_node(void *itm) {
 	node_t *nw = (node_t *) calloc(1, sizeof(node_t));
-	nw->itm = itm;
-	nw->nxt = NULL;
+	if(nw != NULL) {
+		nw->itm = itm;
+		nw->nxt = NULL;
+	} else {
+		printf("Erro:\n\tNão foi possível alocar memória para o novo node.\n");
+	}
 	return nw;
 }
 
@@ -27,6 +31,7 @@ void *item(node_t *nd) {
 	if(nd != NULL) {
 		return nd->itm;
 	} else {
+		printf("Erro:\n\tO ponteiro para o node é NULL.\n");
 		return NULL;
 	}
 }
@@ -34,6 +39,8 @@ void *item(node_t *nd) {
 void set_item(node_t *nd, void *itm) {
 	if(nd != NULL) {
 		nd->itm = itm;
+	} else {
+		printf("O\n\tponteiro para o node é NULL.\n");
 	}
 }
 
@@ -41,6 +48,7 @@ node_t *next(node_t *nd) {
 	if(nd != NULL) {
 		return nd->nxt;
 	} else {
+		printf("O\n\tponteiro para o node é NULL.\n");
 		return NULL;
 	}
 }
@@ -48,5 +56,7 @@ node_t *next(node_t *nd) {
 void set_next(node_t *nd, node_t *nxt) {
 	if(nd != NULL) {
 		nd->nxt = nxt;
+	} else {
+		printf("O\n\tponteiro para o node é NULL.\n");
 	}
 }

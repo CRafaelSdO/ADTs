@@ -2,7 +2,6 @@
 #define LINKED_LIST_H
 
 #include "node.h"
-#include <stdio.h>
 #include <limits.h>
 #include <stdbool.h>
 
@@ -13,7 +12,9 @@ linked_list_t *new_list();
 
 void destroy_list(linked_list_t **, void (void **));
 
-void insert(void *, S64_t, linked_list_t *);
+void insert_by_item(void *, linked_list_t *, bool (void *, void *));
+
+void insert_by_index(void *, S64_t, linked_list_t *);
 
 S64_t get_index_of_item(void *, linked_list_t *, bool (void *, void *));
 
