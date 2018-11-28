@@ -59,7 +59,7 @@ void insert_by_item(void *itm, LL_t *lst, bool (*cmp)(void *, void *)) {
 				set_next(nw, lst->hd);
 				lst->hd = nw;
 			} else {
-				while(next(tmp) != NULL && !cmp(itm, item(tmp))) {
+				while(next(tmp) != NULL && !cmp(itm, item(next(tmp)))) {
 					tmp = next(tmp);
 				}
 				set_next(nw, next(tmp));

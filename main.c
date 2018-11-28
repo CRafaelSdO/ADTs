@@ -133,4 +133,6 @@ int main(int argc, char *argv[]) {
     if(oList == NULL) printf("oList destruida\n");
     destroy_list(&uList, destroy_int);
     if(uList == NULL) printf("uList destruida\n");
+
+    return 0;
 }
