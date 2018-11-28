@@ -1,15 +1,17 @@
-#include "libs/lln.h"
+#include "libs/dlln.h"
 
-struct _linked_list_node {
+struct _double_linked_list_node {
 	void *itm;
-	LLN_t *nxt;
+	DLLN_t *nxt;
+	DLLN_t *prv;
 };
 
-LLN_t *new_node(void *itm) {
-	LLN_t *nw = (LLN_t *) calloc(1, sizeof(LLN_t));
+DLLN_t *new_node(void *itm) {
+	DLLN_t *nw = (DLLN_t *) calloc(1, sizeof(DLLN_t));
 	if(nw != NULL) {
 		nw->itm = itm;
 		nw->nxt = NULL;
+		nw->prv = NULL;
 		return nw;
 	} else {
 		printf("Erro (new_node):\n\tNão foi possível alocar memória para o novo node.\n");
@@ -17,7 +19,7 @@ LLN_t *new_node(void *itm) {
 	return NULL;
 }
 
-void destroy_node(LLN_t **nd, void (*destroy_item)(void **)) {
+void destroy_node(DLLN_t **nd, void (*destroy_item)(void **)) {
 	if((*nd) != NULL) {
 		if((*nd)->nxt != NULL) {
 			destroy_node(&(*nd)->nxt, destroy_item);
@@ -32,7 +34,7 @@ void destroy_node(LLN_t **nd, void (*destroy_item)(void **)) {
 	}
 }
 
-void *item(LLN_t *nd) {
+void *item(DLLN_t *nd) {
 	if(nd != NULL) {
 		return nd->itm;
 	} else {
@@ -41,7 +43,7 @@ void *item(LLN_t *nd) {
 	return NULL;
 }
 
-void set_item(LLN_t *nd, void *itm) {
+void set_item(DLLN_t *nd, void *itm) {
 	if(nd != NULL) {
 		nd->itm = itm;
 	} else {
@@ -49,7 +51,7 @@ void set_item(LLN_t *nd, void *itm) {
 	}
 }
 
-LLN_t *next(LLN_t *nd) {
+DLLN_t *next(DLLN_t *nd) {
 	if(nd != NULL) {
 		return nd->nxt;
 	} else {
@@ -58,9 +60,26 @@ LLN_t *next(LLN_t *nd) {
 	return NULL;
 }
 
-void set_next(LLN_t *nd, LLN_t *nxt) {
+void set_next(DLLN_t *nd, DLLN_t *nxt) {
 	if(nd != NULL) {
 		nd->nxt = nxt;
+	} else {
+		printf("Erro (set_next):\n\tO ponteiro para o node é NULL.\n");
+	}
+}
+
+DLLN_t *previus(DLLN_t *nd) {
+	if(nd != NULL) {
+		return nd->prv;
+	} else {
+		printf("Erro (next):\n\tO ponteiro para o node é NULL.\n");
+	}
+	return NULL;
+}
+
+void set_previus(DLLN_t *nd, DLLN_t *prv) {
+	if(nd != NULL) {
+		nd->prv = prv;
 	} else {
 		printf("Erro (set_next):\n\tO ponteiro para o node é NULL.\n");
 	}

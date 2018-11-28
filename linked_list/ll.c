@@ -52,17 +52,20 @@ void insert_by_item(void *itm, LL_t *lst, bool (*cmp)(void *, void *)) {
 			LLN_t *nw = new_node(itm);
 			LLN_t *tmp = lst->hd;
 			if(is_empty(lst)) {
-				set_next(nw, lst->hd);
 				lst->hd = nw;
 				lst->tl = lst->hd;
 			} else if(cmp(itm, item(tmp))) {
-				set_next(nw, lst->hd);
+				set_next(nw, tmp);
 				lst->hd = nw;
 			} else {
 				while(next(tmp) != NULL && !cmp(itm, item(next(tmp)))) {
 					tmp = next(tmp);
 				}
-				set_next(nw, next(tmp));
+				if(next(tmp) != NULL) {
+					set_next(nw, next(tmp));
+				} else {
+					lst->tl = nw;
+				}
 				set_next(tmp, nw);
 			}
 			lst->lngth++;
@@ -84,13 +87,17 @@ void insert_by_index(void *itm, S64_t ndx, LL_t *lst) {
 				lst->tl = lst->hd;
 			}
 			lst->lngth++;
-		} else if(ndx <= length(lst) && ndx > 0) {
+		} else if(ndx > 0 && ndx <= length(lst)) {
 			LLN_t *nw = new_node(itm);
 			LLN_t *tmp = lst->hd;
 			for(S64_t i = 0; i < ndx - 1; i++) {
 				tmp = next(tmp);
 			}
-			set_next(nw, next(tmp));
+			if(next(tmp) != NULL) {
+				set_next(nw, next(tmp));
+			} else {
+				lst->tl = nw;
+			}
 			set_next(tmp, nw);
 			lst->lngth++;
 		} else {
@@ -139,22 +146,46 @@ void *get_item_of_index(S64_t ndx, LL_t *lst) {
 	return NULL;
 }
 
+void *remove_head_node(LL_t *lst) {
+	LLN_t *rmv = lst->hd;
+	void *rtrn = item(rmv);
+	lst->hd = next(rmv);
+	set_next(rmv, NULL);
+	set_item(rmv, NULL);
+	destroy_node(&rmv, NULL);
+	lst->lngth--;
+	return rtrn;
+}
+
+void *remove_next_node(LLN_t *prmv, LL_t *lst) {
+	LLN_t *rmv = next(prmv);
+	set_next(prmv, next(rmv));
+	if(rmv == lst->tl) {
+		lst->tl = prmv;
+	}
+	void *rtrn = item(rmv);
+	set_next(rmv, NULL);
+	set_item(rmv, NULL);
+	destroy_node(&rmv, NULL);
+	lst->lngth--;
+	return rtrn;
+}
+
 void *remove_by_item(void *itm, LL_t *lst, bool (*eql)(void *, void *)){
 	if(lst != NULL) {
 		if(eql != NULL) {
 			LLN_t *tmp = lst->hd;
-			while(next(tmp) != NULL) {
-				if(eql(itm, item(next(tmp)))) {
-					LLN_t *rmv = next(tmp);
-					set_next(tmp, next(rmv));
-					set_next(rmv, NULL);
-					void *rtrn = item(rmv);
-					set_item(rmv, NULL);
-					destroy_node(&rmv, NULL);
-					lst->lngth--;
-					return rtrn;
+			if(is_empty(lst)) {
+				printf("Erro (remove_by_item):\n\tLista vazia.\n");
+			} else if(eql(itm, item(tmp))) {
+				return remove_head_node(lst);
+			} else {
+				while(next(tmp) != NULL) {
+					if(eql(itm, item(next(tmp)))) {
+						return remove_next_node(tmp, lst);
+					}
+					tmp = next(tmp);
 				}
-				tmp = next(tmp);
 			}
 		} else {
 			printf("Erro (remove_by_item):\n\tO ponteiro para a função é NULL.\n");
@@ -172,25 +203,12 @@ void *remove_by_index(S64_t ndx, LL_t *lst) {
 		} else {
 			LLN_t *tmp = lst->hd;
 			if(ndx == 0) {
-				lst->hd = next(tmp);
-				set_next(tmp, NULL);
-				void *rtrn = item(tmp);
-				set_item(tmp, NULL);
-				destroy_node(&tmp, NULL);
-				lst->lngth--;
-				return rtrn;
+				return remove_head_node(lst);
 			}
 			for(S64_t i = 0; i < ndx - 1; i++) {
 				tmp = next(tmp);
 			}
-			LLN_t *rmv = next(tmp);
-			set_next(tmp, next(rmv));
-			set_next(rmv, NULL);
-			void *rtrn = item(rmv);
-			set_item(rmv, NULL);
-			destroy_node(&rmv, NULL);
-			lst->lngth--;
-			return rtrn;
+			return remove_next_node(tmp, lst);
 		}
 	} else {
 		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");

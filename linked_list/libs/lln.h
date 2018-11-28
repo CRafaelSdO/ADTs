@@ -5,7 +5,7 @@
 #include <stdlib.h>
 
 /*
- * Definição do tipos LLN_t por conveniência.
+ * Definição do tipo LLN_t por conveniência.
  */
 typedef struct _linked_list_node LLN_t;
 
