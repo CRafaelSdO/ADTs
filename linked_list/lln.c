@@ -1,4 +1,4 @@
-#include "libs/node.h"
+#include "libs/lln.h"
 
 struct _linked_list_node {
 	void *itm;

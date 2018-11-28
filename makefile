@@ -1,4 +1,4 @@
-CC = clang
+CC = gcc
 FLG = -std=c11 -Wall
 
 DBGD = DEBUG/

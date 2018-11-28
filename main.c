@@ -1,5 +1,5 @@
 //This Main is just for testing the codes
-#include "linked_list/libs/linked_list.h"
+#include "linked_list/libs/ll.h"
 
 bool equals_int(void *x, void *y) {
     if(x != NULL && y != NULL) {

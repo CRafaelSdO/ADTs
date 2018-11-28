@@ -1,7 +1,7 @@
 #ifndef LL_H
 #define LL_H
 
-#include "node.h"
+#include "lln.h"
 #include <limits.h>
 #include <stdbool.h>
 

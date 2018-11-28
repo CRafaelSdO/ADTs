@@ -1,4 +1,4 @@
-#include "libs/linked_list.h"
+#include "libs/ll.h"
 
 struct _linked_list {
 	S64_t lngth;
