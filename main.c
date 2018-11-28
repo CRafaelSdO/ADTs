@@ -1,5 +1,5 @@
 //This Main is just for testing the codes
-#include "linked_list/libs/ll.h"
+#include "double_linked_list/libs/dll.h"
 
 bool equals_int(void *x, void *y) {
     if(x != NULL && y != NULL) {
@@ -29,8 +29,8 @@ void destroy_int(void **n) {
 }
 
 int main(int argc, char *argv[]) {
-    LL_t *oList = new_list();
-    LL_t *uList = new_list();
+    DLL_t *oList = new_list();
+    DLL_t *uList = new_list();
 
     if(is_empty(oList)) printf("oList vazia\n"); else  printf("oList não vazia\n");
     printf("Tamanho da oList:\t%lld\n", length(oList));
