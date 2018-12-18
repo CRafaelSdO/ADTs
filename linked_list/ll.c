@@ -198,7 +198,7 @@ void *remove_by_item(void *itm, LL_t *lst, bool (*eql)(void *, void *)){
 void *remove_by_index(S64_t ndx, LL_t *lst) {
 	if(lst != NULL) {
 		if(ndx < 0 || ndx >= length(lst)) {
-			printf("Erro:\n\tIndice fora dos limítes.\n");
+			printf("Erro (remove_by_index):\n\tIndice fora dos limítes.\n");
 		} else {
 			LLN_t *tmp = lst->hd;
 			if(ndx == 0) {
@@ -210,7 +210,7 @@ void *remove_by_index(S64_t ndx, LL_t *lst) {
 			return remove_next_node(tmp, lst);
 		}
 	} else {
-		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");
+		printf("Erro (remove_by_index):\n\tO ponteiro para a lista é NULL.\n");
 	}
 	return NULL;
 }
@@ -219,7 +219,7 @@ S64_t length(LL_t *lst) {
 	if(lst != NULL) {
 		return lst->lngth;
 	} else {
-		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");
+		printf("Erro (length):\n\tO ponteiro para a lista é NULL.\n");
 	}
 	return LLONG_MIN;
 }
@@ -228,7 +228,7 @@ bool is_empty(LL_t *lst) {
 	if(lst != NULL) {
 		return length(lst) == 0;
 	} else {
-		printf("Erro:\n\tO ponteiro para a lista é NULL.\n");
+		printf("Erro (length):\n\tO ponteiro para a lista é NULL.\n");
 	}
 	return true;
 }
