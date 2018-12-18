@@ -12,11 +12,10 @@ DLLN_t *new_node(void *itm) {
 		nw->itm = itm;
 		nw->nxt = NULL;
 		nw->prv = NULL;
-		return nw;
 	} else {
 		printf("Erro (new_node):\n\tNão foi possível alocar memória para o novo node.\n");
 	}
-	return NULL;
+	return nw;
 }
 
 void destroy_node(DLLN_t **nd, void (*destroy_item)(void **)) {

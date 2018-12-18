@@ -12,11 +12,10 @@ DLL_t *new_list() {
 		nw->lngth = 0;
 		nw->hd = NULL;
 		nw->tl = NULL;
-		return nw;
 	} else {
 		printf("Erro (new_list):\n\tNão foi possível alocar memória para a nova lista.\n");
 	}
-	return NULL;
+	return nw;
 }
 
 void print_list(DLL_t *lst, void (prnt_itm)(void *)) {

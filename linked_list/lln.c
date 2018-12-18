@@ -10,11 +10,10 @@ LLN_t *new_node(void *itm) {
 	if(nw != NULL) {
 		nw->itm = itm;
 		nw->nxt = NULL;
-		return nw;
 	} else {
 		printf("Erro (new_node):\n\tNão foi possível alocar memória para o novo node.\n");
 	}
-	return NULL;
+	return nw;
 }
 
 void destroy_node(LLN_t **nd, void (*destroy_item)(void **)) {
